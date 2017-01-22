@@ -3,7 +3,7 @@ require 'nn'
 require 'optim'
 require 'eladtools'
 require 'recurrent'
-require 'utils.textDataProvider'
+require './textDataProvider'
 -------------------------------------------------------
 
 cmd = torch.CmdLine()
@@ -61,10 +61,10 @@ torch.setdefaulttensortype('torch.FloatTensor')
 ----------------------------------------------------------------------
 local trainWordVec, testWordVec, valWordVec, decoder, decoder_, vocab
 
-trainWordVec, vocab, decoder = loadTextFileWords('./data/ptb.train.txt')
-testWordVec, vocab, decoder_ = loadTextFileWords('./data/ptb.test.txt', vocab)
+trainWordVec, vocab, decoder = loadTextFileWords('recurrent.torch/examples/language/data/ptb.train.txt')
+testWordVec, vocab, decoder_ = loadTextFileWords('recurrent.torch/examples/language/data/ptb.test.txt', vocab)
 assert(#decoder == #decoder_) --no new words
-valWordVec, vocab, decoder_ = loadTextFileWords('./data/ptb.valid.txt', vocab)
+valWordVec, vocab, decoder_ = loadTextFileWords('recurrent.torch/examples/language/data/ptb.valid.txt', vocab)
 assert(#decoder == #decoder_) --no new words
 data = {
   trainingData = trainWordVec,
@@ -101,7 +101,7 @@ else
 end
 
 modelConfig.classifier:share(modelConfig.embedder, 'weight', 'gradWeight')
-local trainingConfig = require 'utils.trainRecurrent'
+local trainingConfig = require './trainRecurrent'
 local train = trainingConfig.train
 local evaluate = trainingConfig.evaluate
 local sample = trainingConfig.sample
